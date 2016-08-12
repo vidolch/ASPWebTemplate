@@ -13,5 +13,10 @@
         }
 
         public DbSet<T> Items { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<GenericDbContext<T>>(null);
+        }
     }
 }

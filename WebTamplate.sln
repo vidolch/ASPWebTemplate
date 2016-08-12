@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTamplate", "WebTamplate\WebTamplate.csproj", "{C642B796-67F9-4B84-B4F3-702903DC2E5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{C642B796-67F9-4B84-B4F3-702903DC2E5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{08324371-2D6F-4318-8B5E-25EC69EF431B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapping", "Mapping\Mapping.csproj", "{99215874-0F51-4F86-86B2-0FE6FAC4FDFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{F4205276-AEB3-4127-8209-7BAC17DA39B3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{5C6DB8F8-CF50-4E22-82B3-60140978D473}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{F4205276-AEB3-4127-8209-7BAC17DA39B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4205276-AEB3-4127-8209-7BAC17DA39B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4205276-AEB3-4127-8209-7BAC17DA39B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C6DB8F8-CF50-4E22-82B3-60140978D473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C6DB8F8-CF50-4E22-82B3-60140978D473}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C6DB8F8-CF50-4E22-82B3-60140978D473}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C6DB8F8-CF50-4E22-82B3-60140978D473}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

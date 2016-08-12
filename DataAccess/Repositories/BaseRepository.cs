@@ -43,14 +43,38 @@
             this.Context.Items.Add(entity);
         }
 
-        public virtual IQueryable<T> All()
+        public virtual IQueryable<T> GetAll()
         {
-            return this.Context.Items;
+            return this.Context.Items.Where(e => !e.IsDeleted);
         }
 
-        public virtual IQueryable<T> All(int from, int count)
+        public virtual IQueryable<T> GetAll(int from, int count)
         {
-            return this.All().OrderBy(t => t.Id).Skip(from).Take(count);
+            return this.GetAll().OrderBy(t => t.Id).Skip(from).Take(count);
+        }
+
+        public virtual IQueryable<T> GetAll(Expression<Func<T, bool>> predicate)
+        {
+            var all = this.GetAll().Where(predicate);
+
+            if (all == null)
+            {
+                return default(IQueryable<T>);
+            }
+
+            return all;
+        }
+
+        public virtual IQueryable<T> GetAll(Expression<Func<T, bool>> predicate, int from, int count)
+        {
+            var all = this.GetAll().Where(predicate).OrderBy(e => e.CreatedOn).Skip(from).Take(count);
+
+            if (all == null)
+            {
+                return default(IQueryable<T>);
+            }
+
+            return all;
         }
 
         public virtual T Get(int id)
@@ -62,32 +86,14 @@
         {
             this.Context.Entry(entity).State = EntityState.Modified;
         }
-
-        public virtual void AddOrUpdate(T entity)
-        {
-            if (entity.Id == 0)
-            {
-                this.Add(entity);
-            }
-            else
-            {
-                this.Update(entity);
-            }
-        }
-
-        public virtual IQueryable<T> Find(Expression<Func<T, bool>> predicate)
-        {
-            var all = this.Context.Items.Where(predicate);
-
-            if (all == null)
-            {
-                return default(IQueryable<T>);
-            }
-
-            return all;
-        }
-
+        
         public virtual void Remove(T entity)
+        {
+            entity.IsDeleted = true;
+            entity.DeletedOn = DateTime.Now;
+        }
+
+        public virtual void RemoveHard(T entity)
         {
             this.Context.Items.Remove(entity);
         }

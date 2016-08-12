@@ -33,7 +33,7 @@
             return User.Role == Role.Admin;
         }
 
-        public static bool Auth(string username, string password)
+        public static bool Auth(string email, string password)
         {
             AuthenticationService authenticationService = null;
             if (HttpContext.Current != null && HttpContext.Current.Session["LoggedUser"] == null)
@@ -42,9 +42,12 @@
             }
 
             authenticationService = (AuthenticationService)HttpContext.Current.Session["LoggedUser"];
-            authenticationService.Authenticate(username, password);
+            if (authenticationService.Authenticate(email, password))
+            {
+                return true;
+            }
 
-            return true;
+            return false;
         }
 
         public static void Logout()

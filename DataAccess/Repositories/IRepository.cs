@@ -18,10 +18,12 @@
 
         T Get(int id);
 
-        IQueryable<T> All();
+        IQueryable<T> GetAll();
 
-        IQueryable<T> All(int from, int count);
+        IQueryable<T> GetAll(int from, int count);
 
-        IQueryable<T> Find(Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
+
+        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate, int from, int count);
     }
 }

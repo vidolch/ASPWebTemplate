@@ -1,4 +1,6 @@
-﻿namespace Services
+﻿using Services.EntityServices;
+
+namespace Services
 {
     using System;
     using System.Collections.Generic;
@@ -11,11 +13,11 @@
     {
         public User User { get; private set; }
 
-        public bool Authenticate(string username, string password)
+        public bool Authenticate(string email, string password)
         {
-            UserRepository userRepo = new UserRepository();
+            UserService userService = new UserService();
 
-            User user = userRepo.Find(u => u.Username == username && u.Password == password).FirstOrDefault();
+            User user = userService.GetAll(u => u.Email == email && u.Password == password).FirstOrDefault();
 
             if (user != null)
             {

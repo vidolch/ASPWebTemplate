@@ -1,0 +1,96 @@
+﻿@model System.Object
+
+@{
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+    string namePrefix = Model.GetType().GetProperty("Prefix").GetValue(Model, null).ToString();
+    string idPrefix = namePrefix.Replace(".", "_");
+    var parentPager = (WebClient.ViewModels.BasePaginationViewModel)Model.GetType().GetProperty("ParentPager").GetValue(Model, null);
+    var editableProperties = new Dictionary<System.Reflection.PropertyInfo, WebClient.Common.FilterAttribute>();
+    foreach (System.Reflection.PropertyInfo pi in Model.GetType().GetProperties())
+    {
+        object obj = pi.GetCustomAttributes(false).FirstOrDefault(a => a is WebClient.Common.FilterAttribute);
+        if (obj != null)
+        {
+            WebClient.Common.FilterAttribute attrib = (WebClient.Common.FilterAttribute)obj;
+            editableProperties.Add(pi, attrib);
+        }
+    }
+
+    var props = Model.GetType().GetProperties();
+    string id = "";
+    foreach (var prop in props)
+    {
+        if (prop.Name == "TaskId")
+        {
+            id = prop.GetValue(Model).ToString();
+        }
+    }
+}
+
+<form action="/@controller/@action/@id" method="get">
+    <div class="row">
+        @foreach (string key in this.Request.QueryString.Keys)
+        {
+            if (!key.StartsWith(namePrefix) && key != parentPager.Prefix + "CurrentPage")
+            {
+                @Html.Hidden(key, this.Request.QueryString[key])
+                ;
+            }
+        }
+
+        @foreach (var kvp in this.ViewContext.RouteData.Values)
+        {
+            if (kvp.Key != "controller" && kvp.Key != "action" && kvp.Key != parentPager.Prefix + "CurrentPage" && !kvp.Key.StartsWith(namePrefix))
+            {
+                @Html.Hidden(kvp.Key, kvp.Value)
+                ;
+            }
+        }
+        @foreach (var kvp in editableProperties)
+        {
+            <div class="col-md-4">
+                @if (!String.IsNullOrEmpty(kvp.Value.DropDownTargetProperty))
+                {
+                    @Html.Label(idPrefix + kvp.Key.Name)
+                    <select name="@namePrefix@kvp.Value.DropDownTargetProperty" class="form-control">
+                        <option value="null">Please Select Item</option>
+                        @foreach (var item in (IEnumerable<DataAccess.Models.ISelectItem>)kvp.Key.GetValue(Model, null))
+                        {
+                            <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    if (@kvp.ToString().Contains("String"))
+                    {
+                        @Html.Label(kvp.Key.Name, kvp.Value)
+                        @Html.TextBox(namePrefix + kvp.Key.Name, kvp.Key.GetValue(Model, null), new {@class = "form-control"})
+                    }
+                    else if (@kvp.ToString().Contains("DateTime"))
+                    {
+                        @Html.Label(kvp.Key.Name, kvp.Value)
+                        @Html.TextBox(namePrefix + kvp.Key.Name, kvp.Key.GetValue(Model, null), new {@class = "form-control"})
+                    }
+                    else if (@kvp.ToString().Contains("Int"))
+                    {
+                        @Html.Label(kvp.Key.Name, kvp.Value)
+                        @Html.TextBox(namePrefix + kvp.Key.Name, kvp.Key.GetValue(Model, null), new {@class = "form-control"})
+                    }
+                }
+
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <br/>
+            <button class="btn btn-info">
+                <span class="glyphicon glyphicon-search"></span> Search
+            </button>
+            <br/>
+        </div>
+    </div>
+</form>
+
