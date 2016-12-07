@@ -11,8 +11,6 @@ namespace BrowserClient.Controllers
     {
         public ActionResult Index()
         {
-            var v = AuthServiceProvider.User;
-
             return View();
         }
 

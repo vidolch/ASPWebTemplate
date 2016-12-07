@@ -39,7 +39,7 @@ namespace BrowserClient.Controllers
             TListViewModel model = new TListViewModel();
             model.Pager = new BasePaginationViewModel();
             model.Filter = new TFilterViewModel();
-            TryUpdateModel(model);
+            //TryUpdateModel(model);
 
             model = model.PopulatePagingData<T, TListViewModel, TViewModel, TFilterViewModel>(this.service, this.Request.QueryString, this.GetControllerName());
 
@@ -53,8 +53,8 @@ namespace BrowserClient.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var viewModel = this.service.GetAll(x => x.Id == (int)id).AsQueryable().To<TViewModel>().First();
+            var model = this.service.Get((int) id);
+            var viewModel = Mapper.Map<TViewModel>(model);
 
             if (viewModel == null)
             {

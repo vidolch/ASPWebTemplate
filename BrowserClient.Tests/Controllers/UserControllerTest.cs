@@ -1,7 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using BrowserClient.Controllers;
+using BrowserClient.ViewModels.UserManagment;
+using DataAccess.Models;
+using Mapping;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Services.EntityServices;
+using TestStack.FluentMVCTesting;
+using Assert = NUnit.Framework.Assert;
 
 namespace BrowserClient.Tests.Controllers
 {
@@ -11,29 +20,47 @@ namespace BrowserClient.Tests.Controllers
         [TestMethod]
         public void Index()
         {
-            //var autoMapperConfig = new AutoMapperConfig();
-            //autoMapperConfig.Execute(typeof(JokesController).Assembly);
-            //const string JokeContent = "SomeContent";
-            //var jokesServiceMock = new Mock<IJokesService>();
-            //jokesServiceMock.Setup(x => x.GetById(It.IsAny<string>()))
-            //    .Returns(new Joke { Content = JokeContent, Category = new JokeCategory { Name = "asda" } });
-            //var controller = new JokesController(jokesServiceMock.Object);
-            //controller.WithCallTo(x => x.ById("asdasasd"))
-            //    .ShouldRenderView("ById")
-            //    .WithModel<JokeViewModel>(
-            //        viewModel =>
-            //        {
-            //            Assert.AreEqual(JokeContent, viewModel.Content);
-            //        }).AndNoModelErrors();
+            var autoMapperConfig = new AutoMapperConfig();
+            autoMapperConfig.Execute(typeof(UserController).Assembly);
+            
+            var service = new Mock<UserService>();
+            
+            var users = new List<User>
+            {
+                new User { Username = "vidolch"},
+                new User { Username = "ivan"}
+            }.AsQueryable();
 
+            service.Setup(x => x.GetAll()).Returns(users);
 
+            UserController controller = new UserController(service.Object);
 
-            UserController controller = new UserController();
+            controller.WithCallTo(x => x.Index()).ShouldRenderView("Index").WithModel<UserListViewModel>(
+                vm =>
+                {
+                    Assert.AreEqual(users, vm.Items);
+                }).AndNoModelErrors();
+        }
 
-            ActionResult action = controller.Index();
+        [TestMethod]
+        public void Details()
+        {
+            var autoMapperConfig = new AutoMapperConfig();
+            autoMapperConfig.Execute(typeof(UserController).Assembly);
 
-            Assert.IsNotNull(action);
+            var service = new Mock<UserService>();
 
+            string username = "vidolch";
+
+            service.Setup(x => x.Get(It.IsAny<int>())).Returns(new User { Username = username, Role = Role.Admin });
+
+            UserController controller = new UserController(service.Object);
+
+            controller.WithCallTo(x => x.Details(1)).ShouldRenderView("Details").WithModel<UserViewModel>(
+                vm =>
+                {
+                    Assert.AreEqual(username, vm.Username);
+                }).AndNoModelErrors();
         }
     }
 }
