@@ -8,7 +8,7 @@ namespace BrowserClient.Controllers
 
     public class UserController : BaseController<User, UserViewModel, UserListViewModel, UserEditViewModel, UserFilter>
     {
-        public UserController() : base(new UserService())
+        public UserController(UserService service) : base(service)
         {
             
         }

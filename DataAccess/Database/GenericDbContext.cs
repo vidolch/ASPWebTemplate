@@ -8,7 +8,7 @@
         where T : class
     {
         public GenericDbContext()
-            : base("WebContext")
+            : base("DataAccess.AppDataContext")
         {
         }
 

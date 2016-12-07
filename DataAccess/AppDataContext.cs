@@ -3,8 +3,12 @@
     using Models;
     using System.Data.Entity;
 
-    class AppDataContext : DbContext
+    public class AppDataContext : DbContext
     {
+        public AppDataContext() : base("DataAccess.AppDataContext")
+        {
+
+        }
         public DbSet<User> Users { get; set; }
     }
 }

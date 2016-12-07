@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Mapping;
+using BrowserClient.App_Start;
 
 namespace BrowserClient
 {
@@ -14,6 +15,7 @@ namespace BrowserClient
     {
         protected void Application_Start()
         {
+            AutofacConfig.RegisterAutofac();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
